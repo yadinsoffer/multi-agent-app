@@ -1,3 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* White background */
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: calc(100vh - 60px); /* Full height minus header height */
+}
+
+.sidebar {
+    width: 200px; /* Fixed width for sidebar */
+    background-color: #f4f4f4; /* Light grey background */
+    padding: 10px;
+}
+
+.main-content {
+    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+}
+
+.right-sidebar {
+    width: 300px; /* Fixed width for right sidebar */
+    background-color: #ffffff; /* White background */
+    padding: 10px;
+}
+
+.chat-window {
+    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.chat-messages {
+    flex: 1; /* Take remaining space */
+    overflow-y: auto; /* Scrollable */
+}
+
+.input-area {
+    display: flex;
+    padding: 10px;
+}
+
+input[type="text"] {
+    flex: 1; /* Take remaining space */
+    padding: 10px;
+    border: 1px solid #ccc; /* Light grey border */
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.agent-list {
+    border: 1px solid #ccc; /* Light grey border */
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #ffffff; /* White background */
+}
+
 .App {
   text-align: center;
 }
