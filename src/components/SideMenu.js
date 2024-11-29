@@ -1,26 +1,37 @@
 // src/components/SideMenu.js
 import React from 'react';
-import { Link } from 'react-router-dom'; // Optional: If you're using React Router for navigation
+import { Link } from 'react-router-dom'; // Ensure this is imported
+import { FaUser, FaCog, FaBell, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
 
 const SideMenu = () => {
     return (
         <div style={{ padding: '10px' }}>
             <h3>Menu</h3>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-                <li style={{ margin: '10px 0' }}>
-                    <Link to="/profile" style={{ textDecoration: 'none', color: '#333' }}>Profile</Link>
+                <li style={{ margin: '40px 0', paddingLeft: '20px' }}>
+                    <Link to="/profile" style={{ textDecoration: 'none', color: '#333' }}>
+                        <FaUser style={{ marginRight: '8px' }} /> Profile
+                    </Link>
                 </li>
-                <li style={{ margin: '10px 0' }}>
-                    <Link to="/settings" style={{ textDecoration: 'none', color: '#333' }}>Settings</Link>
+                <li style={{ margin: '40px 0', paddingLeft: '20px' }}>
+                    <Link to="/settings" style={{ textDecoration: 'none', color: '#333' }}>
+                        <FaCog style={{ marginRight: '8px' }} /> Settings
+                    </Link>
                 </li>
-                <li style={{ margin: '10px 0' }}>
-                    <Link to="/notifications" style={{ textDecoration: 'none', color: '#333' }}>Notifications</Link>
+                <li style={{ margin: '40px 0', paddingLeft: '20px' }}>
+                    <Link to="/notifications" style={{ textDecoration: 'none', color: '#333' }}>
+                        <FaBell style={{ marginRight: '8px' }} /> Notifications
+                    </Link>
                 </li>
-                <li style={{ margin: '10px 0' }}>
-                    <Link to="/help" style={{ textDecoration: 'none', color: '#333' }}>Help</Link>
+                <li style={{ margin: '40px 0', paddingLeft: '20px' }}>
+                    <Link to="/help" style={{ textDecoration: 'none', color: '#333' }}>
+                        <FaQuestionCircle style={{ marginRight: '8px' }} /> Help
+                    </Link>
                 </li>
-                <li style={{ margin: '10px 0' }}>
-                    <Link to="/logout" style={{ textDecoration: 'none', color: '#333' }}>Logout</Link>
+                <li style={{ margin: '40px 0', paddingLeft: '20px' }}>
+                    <Link to="/logout" style={{ textDecoration: 'none', color: '#333' }}>
+                        <FaSignOutAlt style={{ marginRight: '8px' }} /> Logout
+                    </Link>
                 </li>
             </ul>
         </div>

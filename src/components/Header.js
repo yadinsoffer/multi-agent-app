@@ -1,11 +1,13 @@
    // src/components/Header.js
    import React from 'react';
+   import icon from '../assets/logoblack.svg'; // Adjust the path based on your folder structure
 
    const Header = () => {
        return (
-           <header style={{ background: '#282c34', padding: '20px', color: 'white', textAlign: 'center' }}>
-               <h1>Multi-Agent Engineering App</h1>
-           </header>
+           <div className="header">
+               <img src={icon} alt="Icon" className="header-icon" />
+            
+           </div>
        );
    };
 

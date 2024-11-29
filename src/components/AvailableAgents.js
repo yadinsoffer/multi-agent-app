@@ -1,44 +1,32 @@
 // src/components/AvailableAgents.js
 import React from 'react';
-import { useDrag } from 'react-dnd';
-
-const agents = [
-    'Frontend Engineer',
-    'Backend Engineer',
-    'QA',
-    'Data Analyst',
-    'Production Engineer',
-    'Dev Ops',
-];
+import DraggableAgent from './DraggableAgent';
 
 const AvailableAgents = ({ currentAgents, setCurrentAgents }) => {
+    const agents = [
+        'Scheduling Coordinator',
+        'Sales Call Specialist',
+        'Legal Counsel',
+        'Video Editor',
+        'Administrative Assistant'
+    ];
+
     return (
-        <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px', height: '300px', overflowY: 'scroll' }}>
-            <h3>Available Agents</h3>
-            <ul>
-                {agents
-                    .filter(agent => !currentAgents.includes(agent)) // Only show agents not in currentAgents
-                    .map((agent) => (
-                        <DraggableAgent key={agent} agent={agent} setCurrentAgents={setCurrentAgents} />
-                    ))}
-            </ul>
+        <div className="agent-container" style={{ 
+            padding: '10px', 
+            margin: '10px 0', 
+            height: 'auto', 
+            overflowY: 'scroll', 
+            borderRadius: '8px', 
+            backgroundColor: '#ffffff' 
+        }}>
+            <h3 style={{ paddingBottom: '15px' }}>Available Agents</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                {agents.map((agent, index) => (
+                    <DraggableAgent key={index} agent={agent} />
+                ))}
+            </div>
         </div>
-    );
-};
-
-const DraggableAgent = ({ agent, setCurrentAgents }) => {
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type: 'AGENT',
-        item: { agent },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        }),
-    }));
-
-    return (
-        <li ref={drag} style={{ opacity: isDragging ? 0.5 : 1, cursor: 'move' }}>
-            {agent}
-        </li>
     );
 };
 
