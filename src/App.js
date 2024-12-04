@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import SideMenu from './components/SideMenu';
 import ChatWindow from './components/ChatWindow';
@@ -7,18 +7,49 @@ import CurrentItem from './components/CurrentItem';
 import AvailableAgents from './components/AvailableAgents';
 import CurrentAgents from './components/CurrentAgents';
 import Settings from './components/Settings';
+import Login from './components/Login';
 import './App.css';
 
-const MIN_AVAILABLE_AGENTS = 2; // Minimum number of agents to remain in Available Agents
+const MIN_AVAILABLE_AGENTS = 2;
+
+const MainLayout = ({ currentAgents, setCurrentAgents, availableAgents, isAnimating }) => (
+  <>
+    <Header />
+    <div className="container" style={{ display: 'flex', height: '100vh' }}>
+      <div className="sidebar">
+        <SideMenu />
+      </div>
+      <Routes>
+        <Route path="/settings" element={
+          <div className="main-content" style={{ flex: 1, padding: '20px' }}>
+            <Settings />
+          </div>
+        } />
+        <Route path="/dashboard" element={
+          <>
+            <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <ChatWindow />
+            </div>
+            <div className="right-sidebar" style={{ width: '300px' }}>
+              <CurrentItem isAnimating={isAnimating} />
+              <CurrentAgents currentAgents={currentAgents} setCurrentAgents={setCurrentAgents} />
+              <AvailableAgents currentAgents={currentAgents} setCurrentAgents={setCurrentAgents} />
+            </div>
+          </>
+        } />
+      </Routes>
+    </div>
+  </>
+);
 
 function App() {
   const [currentAgents, setCurrentAgents] = useState([]);
   const [availableAgents, setAvailableAgents] = useState([
     'Scheduling Coordinator',
-                    'Sales Call Specialist',
-                    'Administrative Assistant',
-                    'Data Specialist',
-                    'Legal Counsel'
+    'Sales Call Specialist',
+    'Administrative Assistant',
+    'Data Specialist',
+    'Legal Counsel'
   ]);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -72,22 +103,20 @@ function App() {
 
   return (
     <Router>
-      <Header />
-      <div className="container" style={{ display: 'flex', height: '100vh' }}>
-        <div className="sidebar">
-          <SideMenu />
-        </div>
-        <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <ChatWindow />
-        </div>
-        <div className="right-sidebar" style={{ width: '300px' }}>
-          <CurrentItem isAnimating={isAnimating} />
-          <CurrentAgents currentAgents={currentAgents} setCurrentAgents={setCurrentAgents} />
-          <AvailableAgents currentAgents={currentAgents} setCurrentAgents={setCurrentAgents} />
-        </div>
-      </div>
       <Routes>
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route
+          path="/*"
+          element={
+            <MainLayout
+              currentAgents={currentAgents}
+              setCurrentAgents={setCurrentAgents}
+              availableAgents={availableAgents}
+              isAnimating={isAnimating}
+            />
+          }
+        />
       </Routes>
     </Router>
   );
