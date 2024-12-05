@@ -1,29 +1,32 @@
 // src/components/CurrentItem.js
 import React, { useEffect, useState } from 'react';
-import { FaSpinner, FaCheckCircle, FaHourglassStart } from 'react-icons/fa'; // Importing new icons
 
-const tasks = [
-    { id: 1, text: "Scheduled showing with John", status: "loading" },
-    { id: 2, text: "Preparing contract for Rachel", status: "completed" },
-    { id: 3, text: "Calling new lead for 455 Michigan", status: "not started" },
-];
+const TaskStatus = {
+    NOT_STARTED: 'not_started',
+    IN_PROGRESS: 'in_progress',
+    COMPLETED: 'completed'
+};
 
-const CurrentItem = () => {
-    const [isAnimating, setIsAnimating] = useState(true);
+const getStatusIcon = (status) => {
+    switch (status) {
+        case TaskStatus.COMPLETED:
+            return '✅';
+        case TaskStatus.IN_PROGRESS:
+            return '⏳';
+        case TaskStatus.NOT_STARTED:
+        default:
+            return '○';
+    }
+};
+
+const CurrentItem = ({ tasks }) => {
+    const [displayedTasks, setDisplayedTasks] = useState(tasks || []);
 
     useEffect(() => {
-        // Stop animations after 1 second
-        const timer = setTimeout(() => {
-            setIsAnimating(false);
-        }, 1000); // 1000 milliseconds = 1 second
-
-        return () => clearTimeout(timer); // Cleanup the timer on component unmount
-    }, []);
-
-    // Sort tasks to ensure the completed task is first
-    const sortedTasks = tasks.sort((a, b) => {
-        return a.status === "completed" ? -1 : 1; // Ensure completed tasks are first
-    });
+        if (tasks && tasks.length > 0) {
+            setDisplayedTasks(tasks);
+        }
+    }, [tasks]);
 
     return (
         <div style={{ 
@@ -31,24 +34,58 @@ const CurrentItem = () => {
             padding: '10px', 
             margin: '10px 0', 
             height: 'auto', 
-            borderRadius: '8px', 
+            borderRadius: '8px',
             backgroundColor: 'white' 
         }}>
-            <h3>Current Tasks</h3>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-                {sortedTasks.map(task => (
-                    <li key={task.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                        {task.status === "loading" && <FaSpinner className={`loading-icon ${isAnimating ? 'animate' : ''}`} style={{ marginRight: '8px' }} />} 
-                        {task.status === "completed" && <FaCheckCircle style={{ marginRight: '8px' }} />} 
-                        {task.status === "not started" && <FaHourglassStart className={`hourglass-icon ${isAnimating ? 'animate' : ''}`} style={{ marginRight: '8px' }} />} 
+            <style>
+                {`
+                    .task-item {
+                        opacity: 1;
+                        transition: all 0.3s ease-in-out;
+                    }
+                `}
+            </style>
+            <h3 style={{ 
+                margin: '0 0 10px 0',
+                fontSize: '14px',
+                fontWeight: '600'
+            }}>Current Tasks</h3>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                minHeight: '50px'
+            }}>
+                {displayedTasks.map((task, index) => (
+                    <div 
+                        key={`${task.text}-${index}`}
+                        className="task-item"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            fontSize: '13px',
+                            color: task.status === TaskStatus.COMPLETED ? '#047857' : '#374151',
+                            textDecoration: task.status === TaskStatus.COMPLETED ? 'line-through' : 'none',
+                        }}
+                    >
+                        <span>{getStatusIcon(task.status)}</span>
                         <span>{task.text}</span>
-                    </li>
+                    </div>
                 ))}
-            </ul>
+                {displayedTasks.length === 0 && (
+                    <div style={{
+                        color: '#6B7280',
+                        fontSize: '13px',
+                    }}>
+                        No active tasks
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
 
-export default CurrentItem;
+export { CurrentItem as default, TaskStatus };
 
 //test

@@ -1,6 +1,7 @@
 // src/components/ChatWindow.js
 import React, { useEffect, useState, useRef } from 'react';
 import ChatInput from './ChatInput'; // Import the new ChatInput component
+import { analyzeMessage } from '../utils/openai';
 
 const VoiceAnimation = () => (
     <div style={{ 
@@ -94,7 +95,7 @@ const listingTasks = [
     "Coordinating marketing materials"
 ];
 
-const ChatWindow = () => {
+const ChatWindow = ({ onTasksUpdate }) => {
     const [displayedMessages, setDisplayedMessages] = useState([]);
     const [isTyping, setIsTyping] = useState(false);
     const [lastSender, setLastSender] = useState(null);
@@ -108,6 +109,44 @@ const ChatWindow = () => {
     const [loadingTask, setLoadingTask] = useState(null);
     const [confirmationSent, setConfirmationSent] = useState(false);
     const [showRonMessage, setShowRonMessage] = useState(false);
+    const [currentTasks, setCurrentTasks] = useState([]);
+    const debounceTimerRef = useRef(null);
+
+    // Function to update tasks based on new messages
+    const updateTasks = async (messages) => {
+        try {
+            // Clear any pending debounce timer
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+
+            // Set a new debounce timer
+            debounceTimerRef.current = setTimeout(async () => {
+                const tasks = await analyzeMessage(messages);
+                // Only update if tasks have actually changed
+                if (JSON.stringify(tasks) !== JSON.stringify(currentTasks)) {
+                    setCurrentTasks(tasks);
+                    onTasksUpdate?.(tasks);
+                }
+            }, 1000); // 1 second debounce
+        } catch (error) {
+            console.error('Error updating tasks:', error);
+        }
+    };
+
+    // Update tasks whenever messages change
+    useEffect(() => {
+        if (displayedMessages.length > 0) {
+            updateTasks(displayedMessages);
+        }
+        
+        // Cleanup debounce timer
+        return () => {
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+        };
+    }, [displayedMessages]);
 
     useEffect(() => {
         let messageIndex = 0;
